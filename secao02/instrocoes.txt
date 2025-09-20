@@ -1,0 +1,10 @@
+mkvirtualenv famp-secao02 -p python3.13
+
+pip install fastapi uvicorn   
+
+pip freeze > requirements.txt        
+
+uvicorn main:app --reload      
+
+pip install gunicorn   
+gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker 
