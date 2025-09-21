@@ -1,5 +1,5 @@
- mkvirtualenv famp-secao03 -p python3.13
+mkvirtualenv famp-secao03 -p python3.13
 
- pip install fastapi uvicorn gunicorn
+pip install fastapi uvicorn gunicorn
 
 pip freeze > requirements.txt
