@@ -1,4 +1,4 @@
-from typing import List, Optional, Any
+from typing import Dict, List, Optional, Any
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi import status
@@ -9,6 +9,7 @@ from fastapi import Header
 from fastapi import Depends
 from time import sleep
 from models import Curso
+from models import cursos
 
 def fake_db():
     try:
@@ -18,23 +19,19 @@ def fake_db():
         print('Fechando conexão com banco de dados..')
         sleep(1)  
 
-app = FastAPI()
-
-cursos = {
-    1: {
-        "titulo": "Programção para Leigos",
-        "aulas": 112,
-        "horas": 58
-    },
-    2: {
-        "titulo": "Algoritmos e Lógica de Programção",
-        "aulas": 87,
-        "horas": 67
-    }
-}
+app = FastAPI(
+    title='Api de Cursos',
+    version='0.0.1',
+    description='Uma API para estudo do FastAPI'
+)
 
 
-@app.get('/cursos')
+@app.get('/cursos', 
+         description='Retornar todos os cursos ou uma lista vazia', 
+         summary='Retorna todos os cursos',
+         response_model=List[Curso],
+         response_description='Cursos encontrados com sucesso'
+)
 async def get_cursos(db: Any = Depends(fake_db)):
     return cursos
 
