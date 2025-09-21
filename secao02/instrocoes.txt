@@ -7,4 +7,12 @@ pip freeze > requirements.txt
 uvicorn main:app --reload      
 
 pip install gunicorn   
-gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker 
+gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker
+
+
+
+
+
+
+depois de criar a pyenv
+deactivate para sair e workin <nome_projeto> pra entrar
