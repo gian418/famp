@@ -5,6 +5,7 @@ from fastapi import status
 from fastapi import Response
 from fastapi import Path
 from fastapi import Query
+from fastapi import Header
 from models import Curso
 
 app = FastAPI()
@@ -60,8 +61,12 @@ async def delete_curso(curso_id: int):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Curso não encontrado.")
     
 @app.get('/calculadora')
-async def calculadora(a: int = Query(gt=5), b: int = Query(gt=10), c: Optional[int] = 0):
+async def calculadora(a: int = Query(gt=5), 
+                      b: int = Query(gt=10), 
+                      x_geek: str = Header(alias='x-geek'), 
+                      c: Optional[int] = 0):
     soma = a + b + c
+    print(f'X-GEEK: {x_geek}')
     return {"resultado": soma}
 
 
