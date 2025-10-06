@@ -1,4 +1,4 @@
-from api.v1.endpoints import curso
+from v1.endpoints import curso
 from fastapi import APIRouter
 
 api_rauter = APIRouter()
