@@ -16,6 +16,7 @@ oauth2_schema = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/usuarios/login",
 )
 
+
 async def autenticar(email: EmailStr, senha: str, db: AsyncSession) -> Optional[UsuarioModel]:
     async with db as session:
         query = select(UsuarioModel).where(UsuarioModel.email == email)
@@ -30,22 +31,23 @@ async def autenticar(email: EmailStr, senha: str, db: AsyncSession) -> Optional[
 
         return usuario
 
- def _criar_token(tipo_token: str, tempo_vida: timedelta, sub: str) -> str:
-     sp = timezone('America/Sao_Paulo')
-     expira = datetime.now(tz=sp) + tempo_vida
 
-     payload = {
-         "type": tipo_token,
-         "exp": expira,
-         "iat": datetime.now(tz=sp),
-         "sub": sub
-     }
+def _criar_token(tipo_token: str, tempo_vida: timedelta, sub: str) -> str:
+    sp = timezone('America/Sao_Paulo')
+    expira = datetime.now(tz=sp) + tempo_vida
 
-     return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    payload = {
+        "type": tipo_token,
+        "exp": expira,
+        "iat": datetime.now(tz=sp),
+        "sub": sub
+    }
+    return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
- def criar_token_acesso(sub: str) -> str:
-     return _criar_token(
-         tipo_token="access_token",
-         tempo_vida=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
-         sub=sub
-     )
+
+def criar_token_acesso(sub: str) -> str:
+    return _criar_token(
+        tipo_token="access_token",
+        tempo_vida=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
+        sub=sub
+    )
