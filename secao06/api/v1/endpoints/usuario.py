@@ -40,7 +40,7 @@ async def post_usuario(usuario: UsuarioSchemaCreate, db: AsyncSession = Depends(
 
 
 # GET Usuarios
-@router.get('/', response_model=List(UsuarioSchemaBase))
+@router.get('/', response_model=list[UsuarioSchemaBase])
 async def get_usuarios(db: AsyncSession = Depends(get_session)):
     async with (db as session):
         query = select(UsuarioModel)
@@ -62,7 +62,7 @@ async def get_usuario(usuario_id: int, db: AsyncSession = Depends(get_session)):
 
 
 # PUT Usuario
-@router.put('/{usuario_id}', response_model=UsuarioSchemaBase, status_code=status.HTTP_201_OK)
+@router.put('/{usuario_id}', response_model=UsuarioSchemaBase, status_code=status.HTTP_202_ACCEPTED)
 async def pu_usuario(usuario_id: int, usuario: UsuarioSchemaUpdate ,db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(UsuarioModel).where(and_(UsuarioModel.id == usuario_id))
