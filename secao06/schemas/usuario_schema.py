@@ -1,6 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel, EmailStr
-from artigo_schema import ArtigoSchema
+from schemas.artigo_schema import ArtigoSchema
 
 
 class UsuarioSchemaBase(BaseModel):
