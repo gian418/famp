@@ -1,5 +1,6 @@
 from typing import List, Optional, Any
 
+import sqlalchemy
 from fastapi import APIRouter, Depends, status, HTTPException, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
@@ -8,6 +9,7 @@ from sqlalchemy import and_
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.exc import IntegrityError
 
 from models.usuario_model import UsuarioModel
 from schemas.usuario_schema import UsuarioSchemaBase, UsuarioSchemaCreate, UsuarioSchemaUpdate, UsuarioSchemaArtigos
@@ -34,9 +36,12 @@ async def post_usuario(usuario: UsuarioSchemaCreate, db: AsyncSession = Depends(
         eh_admin=usuario.eh_admin
     )
     async with db as session:
-        session.add(novo_usuario)
-        await session.commit()
-        return novo_usuario
+        try:
+            session.add(novo_usuario)
+            await session.commit()
+            return novo_usuario
+        except IntegrityError:
+            raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail='Já existe um usuário com este email')
 
 
 # GET Usuarios
@@ -55,7 +60,7 @@ async def get_usuario(usuario_id: int, db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(UsuarioModel).where(and_(UsuarioModel.id == usuario_id))
         result = await session.execute(query)
-        usuario = result.scalars().one_or_none()
+        usuario = result.scalars().unique().one_or_none()
         if usuario is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Usuário não encontrado')
         return usuario
@@ -67,7 +72,7 @@ async def pu_usuario(usuario_id: int, usuario: UsuarioSchemaUpdate ,db: AsyncSes
     async with db as session:
         query = select(UsuarioModel).where(and_(UsuarioModel.id == usuario_id))
         result = await session.execute(query)
-        usuario_up: UsuarioSchemaBase = result.scalars().one_or_none()
+        usuario_up: UsuarioSchemaBase = result.scalars().unique().one_or_none()
         if usuario_up is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Usuário não encontrado')
         if usuario.nome:
@@ -90,7 +95,7 @@ async def delete_user(usuario_id: int, db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(UsuarioModel).where(and_(UsuarioModel.id == usuario_id))
         result = await session.execute(query)
-        usuario_del: UsuarioSchemaBase = result.scalars().one_or_none()
+        usuario_del: UsuarioSchemaBase = result.scalars().unique().one_or_none()
         if usuario_del is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Usuário não encontrado')
         await session.delete(usuario_del)

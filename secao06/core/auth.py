@@ -42,7 +42,7 @@ def _criar_token(tipo_token: str, tempo_vida: timedelta, sub: str) -> str:
         "iat": datetime.now(tz=sp),
         "sub": sub
     }
-    return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
 def criar_token_acesso(sub: str) -> str:
