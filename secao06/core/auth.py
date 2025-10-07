@@ -8,9 +8,9 @@ from pytz import timezone
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from configs import settings
-from secao06.core.security import verificar_senha
-from secao06.models.usuario_model import UsuarioModel
+from core.configs import settings
+from core.security import verificar_senha
+from models.usuario_model import UsuarioModel
 
 oauth2_schema = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/usuarios/login",
