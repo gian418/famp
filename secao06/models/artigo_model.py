@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
-from secao06.core.configs import settings
+from core.configs import settings
 
 
 class ArtigoModel(settings.DBBaseModel):
