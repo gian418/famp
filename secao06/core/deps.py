@@ -4,9 +4,9 @@ from jose import jwt, JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from pydantic import BaseModel
-from database import session_local
-from auth import oauth2_schema
-from configs import settings
+from core.database import session_local
+from core.auth import oauth2_schema
+from core.configs import settings
 from models.usuario_model import UsuarioModel
 
 
