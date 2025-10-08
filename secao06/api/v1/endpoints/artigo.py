@@ -67,7 +67,7 @@ async def put_artigo(
             if artigo.descricao:
                 artigo_up.descricao = artigo.descricao
             if artigo.url_fonte:
-                artigo_up.url_fonte = artigo.url_fonte
+                artigo_up.url_fonte = str(artigo.url_fonte)
             if usuario_logado.id != artigo_up.usuario_id:
                 artigo_up.usuario_logado = usuario_logado.id
 
@@ -85,7 +85,7 @@ async def delete_artigo(
         usuario_logado: UsuarioModel = Depends(get_current_user)
 ):
     async with db as session:
-        query = select(ArtigoModel).filter(ArtigoModel.id == id).filter(ArtigoModel.usuario_logado.id == usuario_logado.id)
+        query = select(ArtigoModel).filter(ArtigoModel.id == id).filter(ArtigoModel.usuario_id == usuario_logado.id)
         result = await session.execute(query)
         artigo_del = result.scalars().unique().one_or_none()
 
