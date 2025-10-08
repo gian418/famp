@@ -40,7 +40,7 @@ def _criar_token(tipo_token: str, tempo_vida: timedelta, sub: str) -> str:
         "type": tipo_token,
         "exp": expira,
         "iat": datetime.now(tz=sp),
-        "sub": sub
+        "sub": str(sub)
     }
     return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.ALGORITHM)
 

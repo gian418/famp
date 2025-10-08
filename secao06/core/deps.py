@@ -8,7 +8,11 @@ from core.database import session_local
 from core.auth import oauth2_schema
 from core.configs import settings
 from models.usuario_model import UsuarioModel
+import logging
 
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class TokenData(BaseModel):
     username: Optional[str] = None
@@ -35,7 +39,7 @@ async def get_current_user(
     try:
         payload = jwt.decode(
             token,
-            settings.SECRET_KEY,
+            settings.JWT_SECRET_KEY,
             algorithms=[settings.ALGORITHM],
             options={"verify_aud": False}
         )
@@ -47,6 +51,7 @@ async def get_current_user(
 
         token_data: TokenData = TokenData(username=username)
     except JWTError:
+        logger.exception('Token error')
         raise credentials_exception
 
     async with db as session:

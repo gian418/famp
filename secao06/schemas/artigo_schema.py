@@ -7,7 +7,7 @@ class ArtigoSchema(BaseModel):
     titulo: str
     descricao: str
     url_fonte: HttpUrl
-    usuario_id: Optional[int]
+    usuario_id: Optional[int] = None
 
     class Config:
         from_attributes = True

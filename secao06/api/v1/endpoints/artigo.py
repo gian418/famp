@@ -19,8 +19,8 @@ async def post_artigo(
     novo_artigo: ArtigoModel = ArtigoModel(
         titulo=artigo.titulo,
         descricao=artigo.descricao,
-        url_fonte=artigo.url_fonte,
-        usuario_id=artigo.id,
+        url_fonte=str(artigo.url_fonte),
+        usuario_id=usuario_logado.id,
     )
     db.add(novo_artigo)
     await db.commit()
